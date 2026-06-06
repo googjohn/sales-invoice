@@ -1,0 +1,42 @@
+.notes-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.notes-result-container {
+    display: flex;
+    width: 100%;
+
+    .item1 {
+        width: 60%;
+        label,
+        textarea {
+            display: block;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            resize: none;
+        }
+
+        label {
+            font-size: 1.125rem;
+        }
+    }
+
+    .item2 {
+        /* width: 40%; */
+        margin-left: auto;
+        min-width: 250px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.125rem;
+    }
+}
+
+.save-button-container {
+    display: flex;
+    margin-left: auto;
+    gap: 3px;
+}

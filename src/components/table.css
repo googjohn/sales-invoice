@@ -1,0 +1,44 @@
+.table-container {
+    width: 100%;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th.quantity, th.price, th.amount {
+    width: 20%;
+}
+
+th.product {
+    width: 40%;
+}
+th, td {
+    border: 1px solid black;
+    /* padding: 10px; */
+}
+
+td, th {
+    height: 40px;
+    padding: 10px
+}
+
+th {
+    background: rgb(94, 180, 68);
+    color: white;
+    font-weight: 400;
+    letter-spacing: .015rem;
+}
+
+tbody tr {
+    padding: 10px;
+}
+
+tbody tr:hover {
+  background: #eef6ff;
+}
+
+tbody tr:nth-child(even) {
+  /* background: #d8d7d7; */
+}
