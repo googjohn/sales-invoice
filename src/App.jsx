@@ -95,6 +95,7 @@ function App() {
       customer: '',
       address: '',
     })
+    setNotes({ notes: '' })
     clearItemHandle()
   }
   return (
