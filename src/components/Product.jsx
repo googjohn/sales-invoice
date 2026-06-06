@@ -5,12 +5,17 @@ export default function Product({
     clearItemHandle
 }) {
     const addHandle = () => {
+        if (!productData.product) {
+            alert('Please select product before adding')
+            return;
+        }
         const currPrice = productData.price
         const currQuantity = productData.quantity
         const total = (currPrice * currQuantity).toFixed(2)
         itemHandle(total)
     }
 
+    const isValid = productData.product
     return (
         <div className="product-container light-border">
             <div className="input-group">
@@ -57,6 +62,7 @@ export default function Product({
                     <button
                         className="btn add"
                         onClick={addHandle}
+                        disabled={!isValid}
                     >
                         {"Add"}
                     </button>

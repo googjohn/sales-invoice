@@ -3,7 +3,8 @@ import "./notes.css"
 export default function Notes({
     items,
     saveHandle,
-    cancelHandle
+    cancelHandle,
+    notesHandle
 }) {
     const totalAmount = items.reduce((acc, cur) => {
         acc += parseInt(cur.amount)
@@ -15,7 +16,12 @@ export default function Notes({
             <div className="notes-result-container">
                 <div className="item1">
                     <label htmlFor="notes">Notes</label>
-                    <textarea name="notes" id="notes" rows={4}></textarea>
+                    <textarea
+                        name="notes"
+                        id="notes"
+                        rows={4}
+                        onChange={notesHandle}
+                    ></textarea>
                 </div>
                 <div className="item2">
                     <span className="amount-heading">Total Amount</span>

@@ -16,11 +16,12 @@ function App() {
     quantity: 1,
     price: 0,
   })
-
+  const [notes, setNotes] = useState({ notes: '' })
   const [items, setItems] = useState([])
 
   const changeHandle = (e) => {
     const { id, value } = e.currentTarget
+    if (!value) return;
     setFormData(prev => ({
       ...prev,
       [id]: value,
@@ -61,6 +62,14 @@ function App() {
     })
   }
 
+  const notesHandle = (e) => {
+    const { id, value } = e.currentTarget
+    setNotes(prev => ({
+      ...prev,
+      [id]: value
+    }))
+  }
+
   // change when handling real data
   const saveHandle = () => {
     if (!items.length) {
@@ -69,7 +78,8 @@ function App() {
     }
     const finalData = items.map(item => ({
       ...item,
-      ...formData
+      ...formData,
+      ...notes
     }))
 
     console.log(finalData)
@@ -107,6 +117,7 @@ function App() {
             items={items}
             saveHandle={saveHandle}
             cancelHandle={cancelHandle}
+            notesHandle={notesHandle}
           />
         </div>
       </section>
