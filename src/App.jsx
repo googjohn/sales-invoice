@@ -91,7 +91,7 @@ function App() {
 
     console.log(finalData)
     const stringified = JSON.stringify(finalData)
-    callPostRequest(finalData)
+    // callPostRequest(finalData)
     alert(stringified)
   }
 
