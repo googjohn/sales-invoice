@@ -1,10 +1,11 @@
-import "./notes.css"
+import "../assets/css/notes.css"
 
 export default function Notes({
     items,
+    formData,
     saveHandle,
     cancelHandle,
-    notesHandle
+    notesHandle,
 }) {
     const totalAmount = items.reduce((acc, cur) => {
         acc += parseInt(cur.amount)
@@ -20,6 +21,8 @@ export default function Notes({
                         name="notes"
                         id="notes"
                         rows={4}
+                        value={formData.notes}
+                        placeholder="Leave remarks..."
                         onChange={notesHandle}
                     ></textarea>
                 </div>

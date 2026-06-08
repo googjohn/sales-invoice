@@ -1,8 +1,8 @@
-import "./inputComponent.css"
+import "../assets/css/inputComponent.css"
 
 export default function InputsComponent({
     formdata,
-    changeHandler
+    changeHandle
 }) {
     return (
         <div className="input-container">
@@ -13,7 +13,8 @@ export default function InputsComponent({
                         id="invoice"
                         type="text"
                         value={formdata.invoice}
-                        onChange={changeHandler}
+                        placeholder="001"
+                        onChange={changeHandle}
                     />
                 </div>
 
@@ -23,7 +24,7 @@ export default function InputsComponent({
                         id="date"
                         type="date"
                         value={formdata.date}
-                        onChange={changeHandler}
+                        onChange={changeHandle}
                     />
                 </div>
 
@@ -34,7 +35,8 @@ export default function InputsComponent({
                     type="text"
                     id="customer"
                     value={formdata.customer}
-                    onChange={changeHandler}
+                    placeholder="Your name here."
+                    onChange={changeHandle}
                 />
             </div>
             <div className="input-group item3">
@@ -45,7 +47,8 @@ export default function InputsComponent({
                     rows={4}
                     autoComplete="off"
                     value={formdata.address}
-                    onChange={changeHandler}
+                    placeholder="Your address here."
+                    onChange={changeHandle}
                 />
             </div>
         </div>

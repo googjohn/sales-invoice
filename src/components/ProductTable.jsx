@@ -1,7 +1,7 @@
 import Product from "./Product";
 import Table from "./Table";
-import "./product.css"
-import "./table.css"
+import "../assets/css/product.css"
+import "../assets/css/table.css"
 
 export default function ProductTable({
     productData,

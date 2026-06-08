@@ -39,7 +39,7 @@ export default function Product({
                     <input
                         type="number"
                         id="quantity"
-                        // placeholder="0"
+                        placeholder="0"
                         value={productData.quantity}
                         onChange={changeHandle}
                     />
@@ -51,7 +51,7 @@ export default function Product({
                     <input
                         type="number"
                         id="price"
-                        // placeholder="0"
+                        placeholder="0"
                         value={productData.price}
                         onChange={changeHandle}
                     />

@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import InputsComponent from './components/InputComponent'
 import Title from './components/Title'
 import ProductTable from './components/ProductTable'
 import Notes from './components/ResultAndNotes'
+import useFetch from './lib/useFetch'
 
 function App() {
   const [formData, setFormData] = useState({
@@ -10,18 +11,22 @@ function App() {
     date: '',
     customer: '',
     address: '',
+    notes: '',
   })
   const [productData, setProductData] = useState({
     product: '',
     quantity: 1,
     price: 0,
   })
-  const [notes, setNotes] = useState({ notes: '' })
-  const [items, setItems] = useState([])
+  // const [notes, setNotes] = useState({ notes: '' });
+  const [items, setItems] = useState([]);
+  const [sendData, setSendData] = useState(false);
+  const [getData, setGetData] = useState(false);
+  // const { useGetData, useSendData } = useFetch();
 
   const changeHandle = (e) => {
     const { id, value } = e.currentTarget
-    if (!value) return;
+    // if (!value) return;
     setFormData(prev => ({
       ...prev,
       [id]: value,
@@ -62,42 +67,48 @@ function App() {
     })
   }
 
-  const notesHandle = (e) => {
-    const { id, value } = e.currentTarget
-    setNotes(prev => ({
-      ...prev,
-      [id]: value
-    }))
-  }
-
+  // const notesHandle = (e) => {
+  //   const { id, value } = e.currentTarget
+  //   setNotes(prev => ({
+  //     ...prev,
+  //     [id]: value
+  //   }))
+  // }
+  // const callPostRequest = (finalData) => {
+  // const url = 'http://localhost:1992/api/add'
+  // useSendData(finalData, url)
+  // }
   // change when handling real data
   const saveHandle = () => {
     if (!items.length) {
       alert('You have not added any product.')
       return
     }
-    const finalData = items.map(item => ({
-      ...item,
+    const finalData = {
       ...formData,
-      ...notes
-    }))
+      items
+    }
 
     console.log(finalData)
     const stringified = JSON.stringify(finalData)
+    callPostRequest(finalData)
     alert(stringified)
   }
 
   const cancelHandle = () => {
     setItems([])
+    clearItemHandle()
     setFormData({
       invoice: '',
       date: '',
       customer: '',
       address: '',
+      notes: '',
     })
-    setNotes({ notes: '' })
-    clearItemHandle()
   }
+  console.log(items)
+  console.log(formData)
+  console.log(productData)
   return (
     <>
       <section id="center">
@@ -105,7 +116,7 @@ function App() {
           <Title />
           <InputsComponent
             formdata={formData}
-            changeHandler={changeHandle}
+            changeHandle={changeHandle}
           />
           <ProductTable
             productData={productData}
@@ -116,9 +127,10 @@ function App() {
           />
           <Notes
             items={items}
+            formData={formData}
             saveHandle={saveHandle}
             cancelHandle={cancelHandle}
-            notesHandle={notesHandle}
+            notesHandle={changeHandle}
           />
         </div>
       </section>

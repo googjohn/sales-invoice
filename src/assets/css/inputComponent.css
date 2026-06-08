@@ -12,6 +12,11 @@
         flex: 1;
     }
 
+    input[type=date] {
+        min-width: 200px;
+        flex-grow: 1;
+    }
+
 }
 
 .input-group {
@@ -41,5 +46,15 @@
         width: 100%;
         resize: none;
         padding: 10px;
+    }
+}
+
+@media screen and (max-width: 648px) {
+    .input-group.item1 {
+        flex-direction: column;
+
+        .item1-child1 {
+           margin-bottom: .25rem;
+        }
     }
 }
