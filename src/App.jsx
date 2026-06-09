@@ -53,7 +53,7 @@ function App() {
 
     setProductData({
       product: '',
-      quantity: 1,
+      quantity: 0,
       price: 0,
     })
   }
@@ -61,7 +61,7 @@ function App() {
   const clearItemHandle = () => {
     setProductData({
       product: '',
-      quantity: 1,
+      quantity: 0,
       price: 0,
     })
   }
