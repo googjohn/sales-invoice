@@ -1,32 +1,31 @@
-import { useEffect, useState } from 'react'
-import InputsComponent from './components/InputComponent'
+import { useState } from 'react'
+import { useFetchData, useSendData } from './lib/useFetch'
 import Title from './components/Title'
-import ProductTable from './components/ProductTable'
 import Notes from './components/ResultAndNotes'
-import useFetch from './lib/useFetch'
+import ProductTable from './components/ProductTable'
+import InputsComponent from './components/InputComponent'
 
 function App() {
   const [formData, setFormData] = useState({
-    invoice: '',
+    invoiceNo: '',
     date: '',
     customer: '',
     address: '',
     notes: '',
-  })
+  });
+
   const [productData, setProductData] = useState({
     product: '',
-    quantity: 1,
+    quantity: 0,
     price: 0,
-  })
-  // const [notes, setNotes] = useState({ notes: '' });
+  });
+
   const [items, setItems] = useState([]);
-  const [sendData, setSendData] = useState(false);
-  const [getData, setGetData] = useState(false);
-  // const { useGetData, useSendData } = useFetch();
+  const { fetchData, data: fetchedData } = useFetchData();
+  const { sendData } = useSendData();
 
   const changeHandle = (e) => {
     const { id, value } = e.currentTarget
-    // if (!value) return;
     setFormData(prev => ({
       ...prev,
       [id]: value,
@@ -67,19 +66,8 @@ function App() {
     })
   }
 
-  // const notesHandle = (e) => {
-  //   const { id, value } = e.currentTarget
-  //   setNotes(prev => ({
-  //     ...prev,
-  //     [id]: value
-  //   }))
-  // }
-  // const callPostRequest = (finalData) => {
-  // const url = 'http://localhost:1992/api/add'
-  // useSendData(finalData, url)
-  // }
   // change when handling real data
-  const saveHandle = () => {
+  const saveHandle = async () => {
     if (!items.length) {
       alert('You have not added any product.')
       return
@@ -90,9 +78,11 @@ function App() {
     }
 
     console.log(finalData)
-    const stringified = JSON.stringify(finalData)
-    // callPostRequest(finalData)
-    alert(stringified)
+    await sendData(
+      JSON.stringify(finalData),
+      'http://168.144.33.28:8081/api/v1/action/add'
+    )
+    alert(JSON.stringify(finalData))
   }
 
   const cancelHandle = () => {

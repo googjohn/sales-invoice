@@ -10,7 +10,7 @@ export default function InputsComponent({
                 <div className="item1-child1">
                     <label htmlFor="invoice">Invoice #</label>
                     <input
-                        id="invoice"
+                        id="invoiceNo"
                         type="text"
                         value={formdata.invoice}
                         placeholder="001"

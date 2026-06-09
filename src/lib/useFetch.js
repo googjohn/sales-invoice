@@ -1,17 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export function useFetchData(url) {
+export function useFetchData() {
     const [data, setData] = useState([])
     const [error, setError] = useState(false)
     const [loading, setLoading] = useState(true)
     const controller = useRef(null)
 
-    const fetchData = useCallback(async () => {
+    const fetchData = async (url) => {
+        setLoading(true)
+        setError(false)
+
         if (!url) {
             console.log('Url is not valid.')
             return
         };
 
+        controller.current?.abort()
         controller.current = new AbortController()
         const signal = controller.current.signal
 
@@ -22,69 +26,82 @@ export function useFetchData(url) {
                 throw new Error(`Failed to fetch. ${response.statusText}`)
             }
 
-            const fetchedData = await response.json();
+            const result = await response.json();
 
-            setData(fetchedData)
+            setData(result)
+
+            return result
+
         } catch (error) {
+            if (error.name === 'AbortError') return;
+
             console.error(error)
             setError(true)
         } finally {
-            setError(false)
             setLoading(false)
         }
-    }, [url])
+    }
 
-    useEffect(() => {
-        fetchData();
-        () => controller.current.abort();
-    }, [fetchData])
+    const abortController = () => {
+        controller.current?.abort()
+    }
 
     return {
         data,
         error,
         loading,
+        abortController,
+        fetchData,
     }
 }
 
-export function useSendData(data, url) {
+export function useSendData() {
     const controller = useRef(null)
 
-    const sendData = useCallback(async () => {
+    const sendData = async (data, url) => {
         if (!url) {
             console.log('Url not valid.')
             return;
         }
-
+        controller.current?.abort();
         controller.current = new AbortController();
         const signal = controller.current.signal
 
         try {
             const request = await fetch(url, {
                 method: "POST",
-                contentType: "Application/content",
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify(data),
                 signal: signal
             })
 
             if (!request.ok) {
-                throw new Error(`Failed to send. ${request.statusText}`)
+                const textError = await request.text()
+                console.log(textError)
+
+                throw new Error(
+                    `Failed to send. ${request.status} ${request.statusText}`
+                )
             }
 
-            const text = request.text();
+            const text = await request.text();
             console.log(text)
             return true;
         } catch (error) {
+            if (error.name === 'AbortError') return;
             console.error(error)
             return false;
         }
-    }, [data, url])
+    }
 
-    useEffect(() => {
-        sendData();
-        () => controller.current.abort()
-    }, [sendData])
+    const abortController = () => controller.current?.abort()
 
-    return;
+    return {
+        sendData,
+        abortController
+    }
 }
 
 export default function useFetch() {
@@ -124,7 +141,7 @@ export default function useFetch() {
 
         useEffect(() => {
             fetchData();
-            () => controller.current.abort();
+            return () => controller.current.abort();
         }, [fetchData])
 
         return {
@@ -149,7 +166,9 @@ export default function useFetch() {
             try {
                 const request = await fetch(url, {
                     method: "POST",
-                    contentType: "Application/content",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
                     body: JSON.stringify(data),
                     signal: signal
                 })
@@ -158,7 +177,7 @@ export default function useFetch() {
                     throw new Error(`Failed to send. ${request.statusText}`)
                 }
 
-                const text = request.text();
+                const text = await request.text();
                 console.log(text)
                 return true;
             } catch (error) {
@@ -169,7 +188,7 @@ export default function useFetch() {
 
         useEffect(() => {
             sendData();
-            () => controller.current.abort()
+            return () => controller.current.abort()
         }, [sendData])
 
         return;
