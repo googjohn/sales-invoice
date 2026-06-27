@@ -79,7 +79,7 @@ function App() {
 
     console.log(finalData)
     await sendData(
-      JSON.stringify(finalData),
+      finalData,
       'http://168.144.33.28:8081/api/v1/action/add'
     )
     alert(JSON.stringify(finalData))

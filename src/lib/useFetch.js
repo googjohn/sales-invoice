@@ -68,12 +68,15 @@ export function useSendData() {
         const signal = controller.current.signal
 
         try {
+
             const request = await fetch(url, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify({
+                    "doc_data": data
+                }),
                 signal: signal
             })
 
