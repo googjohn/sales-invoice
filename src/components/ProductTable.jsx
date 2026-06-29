@@ -4,20 +4,20 @@ import "../assets/css/product.css"
 import "../assets/css/table.css"
 
 export default function ProductTable({
-    productData,
-    changeHandler,
     items,
-    itemHandle,
-    clearItemHandle
+    addItemHandle,
+    productData,
+    clearProductData,
+    handleProductDataUpdate,
 }) {
 
     return (
         <div className="pt-container light-border">
             <Product
+                addItemHandle={addItemHandle}
                 productData={productData}
-                changeHandle={changeHandler}
-                itemHandle={itemHandle}
-                clearItemHandle={clearItemHandle}
+                handleProductDataUpdate={handleProductDataUpdate}
+                clearProductData={clearProductData}
             />
             <Table
                 items={items}

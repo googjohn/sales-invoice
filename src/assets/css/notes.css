@@ -56,7 +56,7 @@
     }
 }
 
-@media screen and (max-width: 490px) {
+@media screen and (max-width: 480px) {
     .notes-result-container {
         flex-direction: column;
         gap: 5px;
@@ -74,5 +74,9 @@
         margin-top: 10px;
         justify-content: center;
         align-items: center;
+        
+        button {
+            width: 100%;
+        }
     }
 }

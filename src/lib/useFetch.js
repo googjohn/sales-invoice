@@ -50,8 +50,8 @@ export function useFetchData() {
         data,
         error,
         loading,
-        abortController,
         fetchData,
+        abortController,
     }
 }
 

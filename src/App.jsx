@@ -4,128 +4,168 @@ import Title from './components/Title'
 import Notes from './components/ResultAndNotes'
 import ProductTable from './components/ProductTable'
 import InputsComponent from './components/InputComponent'
+import { calculateAmount } from './lib/utility'
 
 function App() {
-  const [formData, setFormData] = useState({
-    invoiceNo: '',
-    date: '',
-    customer: '',
-    address: '',
-    notes: '',
-  });
+    const [formData, setFormData] = useState({
+        invoiceNo: '',
+        date: '',
+        customer: '',
+        address: '',
+        notes: '',
+    });
 
-  const [productData, setProductData] = useState({
-    product: '',
-    quantity: 0,
-    price: 0,
-  });
+    const [productData, setProductData] = useState({
+        product: '',
+        quantity: 0,
+        price: 0,
+    });
 
-  const [items, setItems] = useState([]);
-  const { fetchData, data: fetchedData } = useFetchData();
-  const { sendData } = useSendData();
+    const [items, setItems] = useState([]);
+    const { fetchData, data: fetchedData } = useFetchData();
+    const { sendData } = useSendData();
 
-  const changeHandle = (e) => {
-    const { id, value } = e.currentTarget
-    setFormData(prev => ({
-      ...prev,
-      [id]: value,
-    }))
-  }
-
-  const productUpdateHandle = (e) => {
-    const { id, value } = e.currentTarget
-    setProductData(prev => ({
-      ...prev,
-      [id]: id !== 'product' ? parseInt(value) : value
-    }))
-  }
-
-  const itemHandle = (amount) => {
-    const newItem = {
-      ...productData,
-      amount: amount
+    // update formData
+    const handleChangeInput = (e) => {
+        const { id, value } = e.currentTarget
+        setFormData(prev => ({
+            ...prev,
+            [id]: value,
+        }))
     }
 
-    setItems(prev => ([
-      ...prev,
-      newItem
-    ]))
+    // update productData
+    const handleProductDataUpdate = (localProductData) => {
+        const { product, quantity, price } = localProductData
 
-    setProductData({
-      product: '',
-      quantity: 0,
-      price: 0,
-    })
-  }
-
-  const clearItemHandle = () => {
-    setProductData({
-      product: '',
-      quantity: 0,
-      price: 0,
-    })
-  }
-
-  // change when handling real data
-  const saveHandle = async () => {
-    if (!items.length) {
-      alert('You have not added any product.')
-      return
-    }
-    const finalData = {
-      ...formData,
-      items
+        setProductData({
+            product,
+            quantity: Number(quantity),
+            price: Number(price),
+        })
     }
 
-    console.log(finalData)
-    await sendData(
-      finalData,
-      'http://168.144.33.28:8081/api/v1/action/add'
+    // add productData to items[]
+    const addItemHandle = () => {
+
+        const existingIndex = items.findIndex(
+            item => productData.product === item.product
+        )
+
+        if (items.length === 0) {
+            const amount = calculateAmount(productData)
+            setItems([{
+                ...productData,
+                amount
+            }])
+            clearProductData()
+            return;
+        };
+
+        if (items.length > 0 && existingIndex === -1) {
+            const amount = calculateAmount(productData)
+            setItems(prev => ([
+                ...prev,
+                {
+                    ...productData,
+                    amount
+                }
+            ]))
+            clearProductData()
+            return;
+        }
+
+        setItems(prev => {
+            const newItems = [...prev]
+            const newItem = {
+                ...newItems[existingIndex],
+                quantity: newItems[existingIndex].quantity + productData.quantity,
+                price: productData.price
+            }
+            newItem.amount = calculateAmount(newItem)
+            newItems[existingIndex] = newItem
+
+            return newItems
+        })
+        clearProductData()
+        return;
+    }
+
+    // clear productData
+    const clearProductData = () => {
+        setProductData({
+            product: '',
+            quantity: 0,
+            price: 0,
+        })
+    }
+
+    // clear formData
+    const clearFormData = () => {
+        setFormData({
+            invoice: '',
+            date: '',
+            customer: '',
+            address: '',
+            notes: '',
+        })
+    }
+
+    // change when handling real data
+    const handleSaveAndSend = async () => {
+        if (!items.length) {
+            alert('Product list is empty.')
+            return
+        }
+
+        const finalData = {
+            ...formData,
+            items
+        }
+
+        console.log(finalData)
+        // await sendData(
+        //     finalData,
+        //     'http://168.144.33.28:8081/api/v1/action/add'
+        // )
+        alert(`Sales invoice successfully saved. Data intentionally not sent to backend.
+            ${JSON.stringify(finalData)}`
+        )
+    }
+
+    const handleCancel = () => {
+        setItems([])
+        clearProductData()
+        clearFormData()
+    }
+
+    return (
+        <>
+            <section id="center">
+                <div className='container'>
+                    <Title />
+                    <InputsComponent
+                        formdata={formData}
+                        handleChangeInput={handleChangeInput}
+                    />
+                    <ProductTable
+                        items={items}
+                        addItemHandle={addItemHandle}
+                        productData={productData}
+                        handleProductDataUpdate={handleProductDataUpdate}
+                        clearProductData={clearProductData}
+                    />
+                    <Notes
+                        items={items}
+                        formData={formData}
+                        handleSaveAndSend={handleSaveAndSend}
+                        handleCancel={handleCancel}
+                        handleChangeInput={handleChangeInput}
+                    />
+                </div>
+            </section>
+        </>
     )
-    alert(JSON.stringify(finalData))
-  }
-
-  const cancelHandle = () => {
-    setItems([])
-    clearItemHandle()
-    setFormData({
-      invoice: '',
-      date: '',
-      customer: '',
-      address: '',
-      notes: '',
-    })
-  }
-  console.log(items)
-  console.log(formData)
-  console.log(productData)
-  return (
-    <>
-      <section id="center">
-        <div className='container'>
-          <Title />
-          <InputsComponent
-            formdata={formData}
-            changeHandle={changeHandle}
-          />
-          <ProductTable
-            productData={productData}
-            changeHandler={productUpdateHandle}
-            items={items}
-            itemHandle={itemHandle}
-            clearItemHandle={clearItemHandle}
-          />
-          <Notes
-            items={items}
-            formData={formData}
-            saveHandle={saveHandle}
-            cancelHandle={cancelHandle}
-            notesHandle={changeHandle}
-          />
-        </div>
-      </section>
-    </>
-  )
 }
 
 export default App

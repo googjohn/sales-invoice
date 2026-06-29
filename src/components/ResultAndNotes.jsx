@@ -3,9 +3,9 @@ import "../assets/css/notes.css"
 export default function Notes({
     items,
     formData,
-    saveHandle,
-    cancelHandle,
-    notesHandle,
+    handleSaveAndSend,
+    handleCancel,
+    handleChangeInput,
 }) {
     const totalAmount = items.reduce((acc, cur) => {
         acc += parseInt(cur.amount)
@@ -20,10 +20,10 @@ export default function Notes({
                     <textarea
                         name="notes"
                         id="notes"
-                        rows={4}
+                        rows={3}
                         value={formData.notes}
                         placeholder="Leave remarks..."
-                        onChange={notesHandle}
+                        onChange={handleChangeInput}
                     ></textarea>
                 </div>
                 <div className="item2">
@@ -34,12 +34,12 @@ export default function Notes({
             <div className="save-button-container">
                 <button
                     className="btn add"
-                    onClick={saveHandle}
+                    onClick={handleSaveAndSend}
                 >
                     {"Save"}
                 </button>
                 <button className="btn cancel"
-                    onClick={cancelHandle}
+                    onClick={handleCancel}
                 >
                     {"Cancel"}
                 </button>

@@ -2,7 +2,7 @@ import "../assets/css/inputComponent.css"
 
 export default function InputsComponent({
     formdata,
-    changeHandle
+    handleChangeInput
 }) {
     return (
         <div className="input-container">
@@ -14,7 +14,7 @@ export default function InputsComponent({
                         type="text"
                         value={formdata.invoice}
                         placeholder="001"
-                        onChange={changeHandle}
+                        onChange={handleChangeInput}
                     />
                 </div>
 
@@ -24,7 +24,7 @@ export default function InputsComponent({
                         id="date"
                         type="date"
                         value={formdata.date}
-                        onChange={changeHandle}
+                        onChange={handleChangeInput}
                     />
                 </div>
 
@@ -35,8 +35,8 @@ export default function InputsComponent({
                     type="text"
                     id="customer"
                     value={formdata.customer}
-                    placeholder="Your name here."
-                    onChange={changeHandle}
+                    placeholder="Customer name"
+                    onChange={handleChangeInput}
                 />
             </div>
             <div className="input-group item3">
@@ -44,11 +44,11 @@ export default function InputsComponent({
                 <textarea
                     id="address"
                     name="address"
-                    rows={4}
+                    rows={3}
                     autoComplete="off"
                     value={formdata.address}
-                    placeholder="Your address here."
-                    onChange={changeHandle}
+                    placeholder="Customer address"
+                    onChange={handleChangeInput}
                 />
             </div>
         </div>

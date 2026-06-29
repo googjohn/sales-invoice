@@ -1,19 +1,43 @@
+import { useState, useEffect } from "react"
+
 export default function Product({
+    addItemHandle,
     productData,
-    changeHandle,
-    itemHandle,
-    clearItemHandle
+    clearProductData,
+    handleProductDataUpdate,
 }) {
+    const [localProduct, setLocalProduct] = useState({
+        product: '',
+        quantity: '',
+        price: '',
+    })
+
+    const handleLocalChange = (e) => {
+        const { id, value } = e.currentTarget
+
+        setLocalProduct(prev => ({
+            ...prev,
+            [id]: value
+        }))
+    }
+
     const addHandle = () => {
-        if (!productData.product) {
+        if (!productData.product && productData.quantity === 0) {
             alert('Please select product before adding')
             return;
         }
-        const currPrice = productData.price
-        const currQuantity = productData.quantity
-        const total = (currPrice * currQuantity).toFixed(2)
-        itemHandle(total)
+
+        addItemHandle()
+        setLocalProduct({
+            product: '',
+            quantity: '',
+            price: '',
+        })
     }
+
+    useEffect(() => {
+        handleProductDataUpdate(localProduct)
+    }, [localProduct])
 
     const isValid = productData.product
     return (
@@ -23,13 +47,13 @@ export default function Product({
                     <label htmlFor="product">Product</label>
                     <select
                         id="product"
-                        value={productData.product}
-                        onChange={changeHandle}
+                        value={localProduct.product}
+                        onChange={handleLocalChange}
                     >
                         <option value="">Select Product</option>
-                        <option value="Product1">something1</option>
-                        <option value="Product2">something2</option>
-                        <option value="Product3">something3</option>
+                        <option value="Product 1">Product 1</option>
+                        <option value="Product 2">Product 2</option>
+                        <option value="Product 3">Product 3</option>
                     </select>
                 </div>
                 <div className="item2">
@@ -40,8 +64,8 @@ export default function Product({
                         type="number"
                         id="quantity"
                         placeholder="0"
-                        value={productData.quantity}
-                        onChange={changeHandle}
+                        value={localProduct.quantity}
+                        onChange={handleLocalChange}
                     />
                 </div>
                 <div className="item3">
@@ -52,8 +76,8 @@ export default function Product({
                         type="number"
                         id="price"
                         placeholder="0"
-                        value={productData.price}
-                        onChange={changeHandle}
+                        value={localProduct.price}
+                        onChange={handleLocalChange}
                     />
                 </div>
             </div>
@@ -68,7 +92,7 @@ export default function Product({
                     </button>
                     <button
                         className="btn clear"
-                        onClick={clearItemHandle}
+                        onClick={clearProductData}
                     >
                         {'Clear'}
                     </button>

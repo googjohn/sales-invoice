@@ -64,3 +64,25 @@
   }
 
 }
+
+@media screen and (max-width: 480px) {
+  .product-container .input-group {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .item1, .item2, .item3 {
+      width: 100%;
+
+      label {
+        text-align: left;
+      }
+    }
+  }
+  
+  .product-container .button-group .button-container {
+    button {
+      width: 100%;
+    }
+  }
+}
